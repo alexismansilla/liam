@@ -16,7 +16,7 @@ jobs:
       with:
         python_version: 3.7
 
-    - name: Set up localstack
+    - name: docker-compose up LocalStack
       run: docker-compose -f docker-compose.localstack.yml up -d
 
     - name: Set up Ruby 2.6
@@ -31,7 +31,7 @@ jobs:
       run: |
         curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
         unzip -q awscliv2.zip
-        ./aws/install
+        sudo ./aws/install
         cp -avr .aws/ ~/
         aws --endpoint-url=http://localhost:4575 sns create-topic --name liam_TestProducer
 
