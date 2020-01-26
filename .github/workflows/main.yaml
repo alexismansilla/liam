@@ -16,9 +16,6 @@ jobs:
       with:
         python_version: 3.7
 
-    - name: docker-compose up LocalStack
-      run: docker-compose -f docker-compose.localstack.yml up -d
-
     - name: Set up Ruby 2.6
       uses: actions/setup-ruby@v1
       with:
@@ -29,6 +26,7 @@ jobs:
 
     - name: Set up LocalStack
       run: |
+        docker-compose -f docker-compose.localstack.yml up -d
         curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
         unzip -q awscliv2.zip
         sudo ./aws/install
@@ -40,7 +38,7 @@ jobs:
         RAILS_ENV: test
       run: |
         gem install bundler
-        bundle install --jobs 4 --retry 3
+        bundle _1.16_ install --jobs 4 --retry 3
 
     - name: Run tests
       run: |
