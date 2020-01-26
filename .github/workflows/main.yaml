@@ -24,20 +24,23 @@ jobs:
       with:
         ruby_version: 2.6.3
 
+    - name: Set up pip
+      run: python -m pip install --upgrade pip
+
+    - name: Set up LocalStack
+      run: |
+        curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip -q awscliv2.zip
+        ./aws/install
+        cp -avr .aws/ ~/
+        aws --endpoint-url=http://localhost:4575 sns create-topic --name liam_TestProducer
+
     - name: Build
       env:
         RAILS_ENV: test
       run: |
         gem install bundler
         bundle install --jobs 4 --retry 3
-        python -m pip install --upgrade pip
-        curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-        unzip -q awscliv2.zip
-        sudo ./aws/install
-        which aws2
-        which aws
-        cp -avr .aws/ ~/
-        aws --endpoint-url=http://localhost:4575 sns create-topic --name liam_TestProducer
 
     - name: Run tests
       run: |
